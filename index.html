@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quest: UH 3 Class IX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-dark: #357ABD;
+            --secondary: #FF6B6B;
+            --accent: #FFD166;
+            --success: #06D6A0;
+            --bg-color: #F4F7FE;
+            --card-bg: #FFFFFF;
+            --text-main: #2D3748;
+            --text-muted: #718096;
+            --border-radius: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            user-select: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Login Screen */
+        .header-title {
+            text-align: center;
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Top Bar */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #EDF2F7;
+            margin-bottom: 20px;
+        }
+
+        .timer-badge {
+            background: #FFF5F5;
+            color: var(--secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #FEB2B2;
+        }
+
+        .warning-badge {
+            background: #FEFCBF;
+            color: #D69E2E;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        /* Reading Text Box */
+        .reading-box {
+            background: #EDF2F7;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 220px;
+            overflow-y: auto;
+            white-space: pre-line;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* Media / Image Slot */
+        .image-slot {
+            width: 100%;
+            max-height: 220px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            background: #F7FAFC;
+            border: 1px dashed #CBD5E0;
+        }
+
+        /* Options */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-card {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #FAFCFE;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary);
+            background: #EBF8FF;
+        }
+
+        .option-card.selected {
+            border-color: var(--primary);
+            background: #EBF8FF;
+            font-weight: 600;
+        }
+
+        .option-prefix {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #EDF2F7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .option-card.selected .option-prefix {
+            background: var(--primary);
+            color: white;
+        }
+
+        .option-img {
+            max-width: 80px;
+            max-height: 50px;
+            margin-left: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            width: auto;
+            padding: 10px 24px;
+        }
+
+        .btn-secondary {
+            background: #E2E8F0;
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: #CBD5E0;
+        }
+
+        .btn-finish {
+            background: var(--success);
+        }
+
+        .btn-finish:hover {
+            background: #05B98A;
+        }
+
+        /* Result Screen */
+        .score-box {
+            text-align: center;
+            padding: 20px;
+            background: #EBF8FF;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .score-val {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #F7FAFC;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+
+        .stat-card .num {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .stat-card.wrong .num { color: var(--secondary); }
+        .stat-card.correct .num { color: var(--success); }
+
+        .wrong-list-box {
+            background: #FFF5F5;
+            border: 1px solid #FEB2B2;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #C53030;
+            margin-bottom: 20px;
+        }
+
+        .gas-notice {
+            background: #FEFCBF;
+            border: 1px dashed #D69E2E;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #744210;
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- SCREEN 1: LOGIN -->
+    <div id="screen-login" class="screen active">
+        <h1 class="header-title">ENGLISH QUEST</h1>
+        <p class="header-subtitle">Ulangan Harian 3 Bahasa Inggris - Kelas IX (Fase D)</p>
+        
+        <form id="loginForm" onsubmit="startQuiz(event)">
+            <div class="form-group">
+                <label for="studentName">Nama Lengkap Siswa</label>
+                <input type="text" id="studentName" class="form-control" placeholder="Masukkan nama..." required>
+            </div>
+            <div class="form-group">
+                <label for="studentClass">Kelas</label>
+                <input type="text" id="studentClass" class="form-control" placeholder="Contoh: IX A" required>
+            </div>
+            <div class="form-group">
+                <label for="passcode">Passcode Ujian</label>
+                <input type="password" id="passcode" class="form-control" placeholder="Masukkan passcode..." required>
+            </div>
+            <button type="submit" class="btn">Mulai Mengerjakan</button>
+        </form>
+
+        <div class="gas-notice">
+            📌 <b>PETUNJUK PENDIDIK:</b> Tempatkan URL Google Apps Script (GAS) pada variabel <code>GAS_WEB_APP_URL</code> di dalam kode JavaScript.
+        </div>
+    </div>
+
+    <!-- SCREEN 2: QUIZ -->
+    <div id="screen-quiz" class="screen">
+        <div class="quiz-header">
+            <div>
+                <span style="font-weight:700; color:var(--primary)" id="displayStudent"></span>
+                <span style="font-size:12px; color:var(--text-muted)" id="displayClass"></span>
+            </div>
+            <div class="warning-badge" id="violationBadge">Pelanggaran: 0/3</div>
+            <div class="timer-badge">
+                ⏱️ <span id="timerDisplay">60:00</span>
+            </div>
+        </div>
+
+        <!-- Slot Teks Bacaan / Dialog -->
+        <div id="readingBox" class="reading-box" style="display: none;"></div>
+
+        <!-- Slot Image URL Soal -->
+        <img id="questionImage" class="image-slot" src="" alt="Gambar Soal">
+
+        <div class="question-text" id="questionText">Loading...</div>
+
+        <div class="options-grid" id="optionsContainer">
+            <!-- Option Cards Generated via JS -->
+        </div>
+
+        <div class="nav-buttons">
+            <button id="btnPrev" class="btn btn-secondary btn-nav" onclick="prevQuestion()">Sebelumnya</button>
+            <button id="btnNext" class="btn btn-nav" onclick="nextQuestion()">Selanjutnya</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: RESULT -->
+    <div id="screen-result" class="screen">
+        <h2 style="text-align: center; margin-bottom: 10px;">Hasil Asesmen</h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 20px;" id="resultStudentInfo"></p>
+
+        <div class="score-box">
+            <div style="font-size: 14px; font-weight: 600; color: var(--text-muted);">SKOR AKHIR</div>
+            <div class="score-val" id="finalScore">0</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card correct">
+                <div>Jawaban Benar</div>
+                <div class="num" id="correctCount">0</div>
+            </div>
+            <div class="stat-card wrong">
+                <div>Jawaban Salah</div>
+                <div class="num" id="wrongCount">0</div>
+            </div>
+        </div>
+
+        <div class="wrong-list-box" id="wrongList">
+            No Soal Salah: -
+        </div>
+
+        <button class="btn" onclick="resetApp()">Kembali ke Halaman Utama</button>
+    </div>
+</div>
+
+<script>
+    /* ==========================================================================
+       1. KONFIGURASI PENDIDIK & URL INTEGRASI
+       ========================================================================== */
+    // ⬇️ PASANG URL GOOGLE APPS SCRIPT (GAS) ANDA DI BAWAH INI ⬇️
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwESksYpm77dLt8f2nokJ55XvjtvHz_vW0I-clVV5FTN-uXu82aTNvtnbQbxxl_KEJ2Rg/exec"; 
+    
+    // Passcode Akses Ujian
+    const SYSTEM_PASSCODE = "ENGLISH9";
+
+    /* ==========================================================================
+       2. BANK SOAL (ISI DAN JUMLAH SAMA PERSIS DENGAN NASKAH)
+       ========================================================================== */
+    const questionsData = [
+        {
+            id: 1,
+            readingText: "Read the dialogue below for questions 1 to 3.\nRian: Hi, Maya! How was your weekend?\nMaya: Not so good, Rian. I couldn't attend the school science exhibition on Saturday because I slipped and twisted my ankle during sports practice on Friday.\nRian: Oh dear! (1) ... I hope your ankle recovers quickly and you can join us on the next outdoor trip.\nMaya: Thank you, Rian. I appreciate your kind words.",
+            question: "1. Choose the most appropriate expression of sympathy to complete the dialogue.",
+            imageURL: "", // Tempat menyisipkan URL Gambar Soal jika ada
+            options: [
+                { text: "Congratulations on your great performance!", img: "" },
+                { text: "I’m so sorry to hear that, Maya.", img: "" },
+                { text: "I hope you win the competition!", img: "" },
+                { text: "That sounds like a wonderful experience!", img: "" }
+            ],
+            answer: 1 // Indeks Pilihan (0=A, 1=B, 2=C, 3=D)
+        },
+        {
+            id: 2,
+            readingText: "Read the dialogue below for questions 1 to 3.\nRian: Hi, Maya! How was your weekend?\nMaya: Not so good, Rian. I couldn't attend the school science exhibition on Saturday because I slipped and twisted my ankle during sports practice on Friday.\nRian: Oh dear! (1) ... I hope your ankle recovers quickly and you can join us on the next outdoor trip.\nMaya: Thank you, Rian. I appreciate your kind words.",
+            question: "2. Why did Maya miss the science exhibition?",
+            imageURL: "",
+            options: [
+                { text: "She had to attend a sports competition.", img: "" },
+                { text: "She forgot the schedule of the event.", img: "" },
+                { text: "She injured her ankle on Friday.", img: "" },
+                { text: "She went on an outdoor trip with Rian.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 3,
+            readingText: "Read the dialogue below for questions 1 to 3.\nRian: Hi, Maya! How was your weekend?\nMaya: Not so good, Rian. I couldn't attend the school science exhibition on Saturday because I slipped and twisted my ankle during sports practice on Friday.\nRian: Oh dear! (1) ... I hope your ankle recovers quickly and you can join us on the next outdoor trip.\nMaya: Thank you, Rian. I appreciate your kind words.",
+            question: "3. What is Rian’s main intention in the conversation?",
+            imageURL: "",
+            options: [
+                { text: "To persuade Maya to join the science fair.", img: "" },
+                { text: "To show empathy and give hope for Maya's recovery.", img: "" },
+                { text: "To criticize Maya for being careless in sports practice.", img: "" },
+                { text: "To invite Maya to an outdoor trip immediately.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 4,
+            readingText: "Read the social media comment thread below for questions 4 to 5.\n@dina_vlogs: Sadly, my favorite bicycle got stolen from the school yard yesterday after football practice. I had to walk home for an hour. 😔\n@alvin_pratama: I'm really sorry that happened to you, Dina! I hope the school security guards can find it soon through the CCTV.",
+            question: "4. Alvin expressed his sympathy to Dina because ...",
+            imageURL: "",
+            options: [
+                { text: "She lost her football match.", img: "" },
+                { text: "Her bicycle was stolen at school.", img: "" },
+                { text: "She lost her phone during practice.", img: "" },
+                { text: "She couldn't walk home safely.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 5,
+            readingText: "Read the social media comment thread below for questions 4 to 5.\n@dina_vlogs: Sadly, my favorite bicycle got stolen from the school yard yesterday after football practice. I had to walk home for an hour. 😔\n@alvin_pratama: I'm really sorry that happened to you, Dina! I hope the school security guards can find it soon through the CCTV.",
+            question: "5. What can we infer from Alvin's reply?",
+            imageURL: "",
+            options: [
+                { text: "Alvin suspects the security guard stole the bicycle.", img: "" },
+                { text: "Alvin hopes the CCTV footage will help locate Dina's bike.", img: "" },
+                { text: "Alvin is offering to buy a new bicycle for Dina.", img: "" },
+                { text: "Alvin was present when the bicycle went missing.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 6,
+            readingText: "Read the text below for questions 6 to 10.\nA Messy Art Project\n(1) Last Wednesday, my group and I worked on a wall magazine project in the art room. We had to finish a poster about environment conservation before 3 PM.\n(2) First, Edo drew the main illustration while Sinta and I wrote the short articles. Suddenly, while Edo was painting the background, he accidentally knocked over a cup of blue paint. The paint spilled all over our main drawing sheet. We were shocked because we only had forty minutes left.\n(3) Fortunately, we did not panic. Sinta quickly wiped the excess paint with tissue, and Edo creatively turned the blue stain into an ocean scene. Finally, we submitted our poster just five minutes before the deadline. We learned that staying calm in an emergency can save the day.",
+            question: "6. What is the main purpose of writing the text above?",
+            imageURL: "",
+            options: [
+                { text: "To inform readers how to make a wall magazine poster.", img: "" },
+                { text: "To retell a past experience during an art project.", img: "" },
+                { text: "To persuade students to join art competitions.", img: "" },
+                { text: "To describe the art room in detail.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 7,
+            readingText: "Read the text below for questions 6 to 10.\nA Messy Art Project\n(1) Last Wednesday, my group and I worked on a wall magazine project in the art room. We had to finish a poster about environment conservation before 3 PM.\n(2) First, Edo drew the main illustration while Sinta and I wrote the short articles. Suddenly, while Edo was painting the background, he accidentally knocked over a cup of blue paint. The paint spilled all over our main drawing sheet. We were shocked because we only had forty minutes left.\n(3) Fortunately, we did not panic. Sinta quickly wiped the excess paint with tissue, and Edo creatively turned the blue stain into an ocean scene. Finally, we submitted our poster just five minutes before the deadline. We learned that staying calm in an emergency can save the day.",
+            question: "7. Paragraph (1) functions as the ... of the recount text.",
+            imageURL: "",
+            options: [
+                { text: "Re-orientation", img: "" },
+                { text: "Events sequence", img: "" },
+                { text: "Orientation", img: "" },
+                { text: "Complication", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 8,
+            readingText: "Read the text below for questions 6 to 10.\nA Messy Art Project\n(1) Last Wednesday, my group and I worked on a wall magazine project in the art room. We had to finish a poster about environment conservation before 3 PM.\n(2) First, Edo drew the main illustration while Sinta and I wrote the short articles. Suddenly, while Edo was painting the background, he accidentally knocked over a cup of blue paint. The paint spilled all over our main drawing sheet. We were shocked because we only had forty minutes left.\n(3) Fortunately, we did not panic. Sinta quickly wiped the excess paint with tissue, and Edo creatively turned the blue stain into an ocean scene. Finally, we submitted our poster just five minutes before the deadline. We learned that staying calm in an emergency can save the day.",
+            question: "8. What were Edo, Sinta, and the writer doing when the incident happened?",
+            imageURL: "",
+            options: [
+                { text: "They were submitting their poster to the teacher.", img: "" },
+                { text: "They were cleaning up the art room together.", img: "" },
+                { text: "They were preparing a wall magazine project.", img: "" },
+                { text: "They were buying paint at the stationery shop.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 9,
+            readingText: "Read the text below for questions 6 to 10.\nA Messy Art Project\n(1) Last Wednesday, my group and I worked on a wall magazine project in the art room. We had to finish a poster about environment conservation before 3 PM.\n(2) First, Edo drew the main illustration while Sinta and I wrote the short articles. Suddenly, while Edo was painting the background, he accidentally knocked over a cup of blue paint. The paint spilled all over our main drawing sheet. We were shocked because we only had forty minutes left.\n(3) Fortunately, we did not panic. Sinta quickly wiped the excess paint with tissue, and Edo creatively turned the blue stain into an ocean scene. Finally, we submitted our poster just five minutes before the deadline. We learned that staying calm in an emergency can save the day.",
+            question: "9. \"Sinta quickly wiped the excess paint...\" (Paragraph 3). The word \"excess\" is closest in meaning to ...",
+            imageURL: "",
+            options: [
+                { text: "extra / remaining", img: "" },
+                { text: "missing / lost", img: "" },
+                { text: "colorful / bright", img: "" },
+                { text: "expensive / valuable", img: "" }
+            ],
+            answer: 0
+        },
+        {
+            id: 10,
+            readingText: "Read the text below for questions 6 to 10.\nA Messy Art Project\n(1) Last Wednesday, my group and I worked on a wall magazine project in the art room. We had to finish a poster about environment conservation before 3 PM.\n(2) First, Edo drew the main illustration while Sinta and I wrote the short articles. Suddenly, while Edo was painting the background, he accidentally knocked over a cup of blue paint. The paint spilled all over our main drawing sheet. We were shocked because we only had forty minutes left.\n(3) Fortunately, we did not panic. Sinta quickly wiped the excess paint with tissue, and Edo creatively turned the blue stain into an ocean scene. Finally, we submitted our poster just five minutes before the deadline. We learned that staying calm in an emergency can save the day.",
+            question: "10. Which sentence from the text uses the Past Continuous Tense?",
+            imageURL: "",
+            options: [
+                { text: "Edo drew the main illustration while Sinta wrote articles.", img: "" },
+                { text: "While Edo was painting the background, he accidentally knocked over a cup.", img: "" },
+                { text: "We learned that staying calm in an emergency can save the day.", img: "" },
+                { text: "Finally, we submitted our poster five minutes before the deadline.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 11,
+            readingText: "Read the short chat log for questions 11 to 13.\nFarhan: Hey Bima, why didn't you answer my phone call at 7 PM last night?\nBima: Sorry! I (11) ... my English assignment when you called. My phone was on silent mode.\nFarhan: Oh, I see. What (12) ... your sister ... at that time? She didn't respond to my text either.\nBima: She was helping my mother prepare dinner in the kitchen.",
+            question: "11. Complete blank (11) with the correct verb form.",
+            imageURL: "",
+            options: [
+                { text: "am typing", img: "" },
+                { text: "typed", img: "" },
+                { text: "was typing", img: "" },
+                { text: "were typing", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 12,
+            readingText: "Read the short chat log for questions 11 to 13.\nFarhan: Hey Bima, why didn't you answer my phone call at 7 PM last night?\nBima: Sorry! I (11) ... my English assignment when you called. My phone was on silent mode.\nFarhan: Oh, I see. What (12) ... your sister ... at that time? She didn't respond to my text either.\nBima: She was helping my mother prepare dinner in the kitchen.",
+            question: "12. Complete blank (12) with the correct verb form.",
+            imageURL: "",
+            options: [
+                { text: "did - do", img: "" },
+                { text: "was - doing", img: "" },
+                { text: "were - doing", img: "" },
+                { text: "is - doing", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 13,
+            readingText: "Read the short chat log for questions 11 to 13.\nFarhan: Hey Bima, why didn't you answer my phone call at 7 PM last night?\nBima: Sorry! I (11) ... my English assignment when you called. My phone was on silent mode.\nFarhan: Oh, I see. What (12) ... your sister ... at that time? She didn't respond to my text either.\nBima: She was helping my mother prepare dinner in the kitchen.",
+            question: "13. Combine these two actions into one logical sentence:\n(Action A: I was studying in the library. Action B: The blackout occurred.)",
+            imageURL: "",
+            options: [
+                { text: "While the blackout occurred, I studied in the library.", img: "" },
+                { text: "The blackout was occurring while I was studying in the library.", img: "" },
+                { text: "I was studying in the library when the blackout occurred.", img: "" },
+                { text: "I studied in the library when the blackout was occurring.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 14,
+            readingText: "Section 4: Reading Comprehension & Details (TP 3)\nRead the personal letter for questions 14 to 18.\nJl. Merdeka No. 12, Bandung\nOctober 10, 2026\nDear Uncle Rudi,\nHow are you? I hope this letter finds you well. I am writing to share an exciting story from last Sunday. My school held an annual charity bazaar in the town square.\nMy class set up a food stall selling homemade pre-loved books and traditional snacks like mendoan and es dawet. My friends and I had worked hard preparing everything the night before. At first, sales were slow because it rained lightly around 9 AM. However, when the sun came out at 10 AM, many visitors rushed to our booth. By 2 PM, all our books and snacks were completely sold out!\nWe raised almost two million rupiahs, which we donated to an orphanage nearby. It was exhausting, but I felt extremely happy to help others.\nPlease write back soon and tell me about your garden project!\nWarm regards,\nNabila",
+            question: "14. What is the main idea of paragraph 2?",
+            imageURL: "",
+            options: [
+                { text: "The reason why sales were slow all afternoon.", img: "" },
+                { text: "The process and success of selling items at the charity bazaar.", img: "" },
+                { text: "How Nabila and her friends cooked mendoan at home.", img: "" },
+                { text: "The exact location of the town square in Bandung.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 15,
+            readingText: "Section 4: Reading Comprehension & Details (TP 3)\nRead the personal letter for questions 14 to 18.\nJl. Merdeka No. 12, Bandung\nOctober 10, 2026\nDear Uncle Rudi,\nHow are you? I hope this letter finds you well. I am writing to share an exciting story from last Sunday. My school held an annual charity bazaar in the town square.\nMy class set up a food stall selling homemade pre-loved books and traditional snacks like mendoan and es dawet. My friends and I had worked hard preparing everything the night before. At first, sales were slow because it rained lightly around 9 AM. However, when the sun came out at 10 AM, many visitors rushed to our booth. By 2 PM, all our books and snacks were completely sold out!\nWe raised almost two million rupiahs, which we donated to an orphanage nearby. It was exhausting, but I felt extremely happy to help others.\nPlease write back soon and tell me about your garden project!\nWarm regards,\nNabila",
+            question: "15. Why were the sales slow in the morning?",
+            imageURL: "",
+            options: [
+                { text: "The bazaar opened late.", img: "" },
+                { text: "The items were too expensive.", img: "" },
+                { text: "Light rain fell around 9 AM.", img: "" },
+                { text: "The town square was closed.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 16,
+            readingText: "Section 4: Reading Comprehension & Details (TP 3)\nRead the personal letter for questions 14 to 18.\nJl. Merdeka No. 12, Bandung\nOctober 10, 2026\nDear Uncle Rudi,\nHow are you? I hope this letter finds you well. I am writing to share an exciting story from last Sunday. My school held an annual charity bazaar in the town square.\nMy class set up a food stall selling homemade pre-loved books and traditional snacks like mendoan and es dawet. My friends and I had worked hard preparing everything the night before. At first, sales were slow because it rained lightly around 9 AM. However, when the sun came out at 10 AM, many visitors rushed to our booth. By 2 PM, all our books and snacks were completely sold out!\nWe raised almost two million rupiahs, which we donated to an orphanage nearby. It was exhausting, but I felt extremely happy to help others.\nPlease write back soon and tell me about your garden project!\nWarm regards,\nNabila",
+            question: "16. Where did the money raised from the bazaar go?",
+            imageURL: "",
+            options: [
+                { text: "To buy new books for the school library.", img: "" },
+                { text: "To fund Uncle Rudi's garden project.", img: "" },
+                { text: "To support a local orphanage.", img: "" },
+                { text: "To cover the cost of making es dawet.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 17,
+            readingText: "Section 4: Reading Comprehension & Details (TP 3)\nRead the personal letter for questions 14 to 18.\nJl. Merdeka No. 12, Bandung\nOctober 10, 2026\nDear Uncle Rudi,\nHow are you? I hope this letter finds you well. I am writing to share an exciting story from last Sunday. My school held an annual charity bazaar in the town square.\nMy class set up a food stall selling homemade pre-loved books and traditional snacks like mendoan and es dawet. My friends and I had worked hard preparing everything the night before. At first, sales were slow because it rained lightly around 9 AM. However, when the sun came out at 10 AM, many visitors rushed to our booth. By 2 PM, all our books and snacks were completely sold out!\nWe raised almost two million rupiahs, which we donated to an orphanage nearby. It was exhausting, but I felt extremely happy to help others.\nPlease write back soon and tell me about your garden project!\nWarm regards,\nNabila",
+            question: "17. Which adjective best describes Nabila’s character based on her actions in the letter?",
+            imageURL: "",
+            options: [
+                { text: "Creative and competitive", img: "" },
+                { text: "Caring and hard-working", img: "" },
+                { text: "Hesitant and reserved", img: "" },
+                { text: "Ambitious and demanding", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 18,
+            readingText: "Section 4: Reading Comprehension & Details (TP 3)\nRead the personal letter for questions 14 to 18.\nJl. Merdeka No. 12, Bandung\nOctober 10, 2026\nDear Uncle Rudi,\nHow are you? I hope this letter finds you well. I am writing to share an exciting story from last Sunday. My school held an annual charity bazaar in the town square.\nMy class set up a food stall selling homemade pre-loved books and traditional snacks like mendoan and es dawet. My friends and I had worked hard preparing everything the night before. At first, sales were slow because it rained lightly around 9 AM. However, when the sun came out at 10 AM, many visitors rushed to our booth. By 2 PM, all our books and snacks were completely sold out!\nWe raised almost two million rupiahs, which we donated to an orphanage nearby. It was exhausting, but I felt extremely happy to help others.\nPlease write back soon and tell me about your garden project!\nWarm regards,\nNabila",
+            question: "18. What can we conclude about the charity event?",
+            imageURL: "",
+            options: [
+                { text: "It failed because of unpredictable weather.", img: "" },
+                { text: "It was successful despite the early morning rain.", img: "" },
+                { text: "It attracted only students from Nabila's school.", img: "" },
+                { text: "It lasted for two consecutive days in Bandung.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 19,
+            readingText: "Section 5: Multimodal Texts - Social Media Posts (TP 5)\nRead the Instagram caption for questions 19 to 23.\n📸 @rizky_scout📍 Cibeureum Campsite\n[Image: A group of junior high scouts wearing uniforms around a campfire at night, smiling and holding acoustic guitars.]\nCaption: Throwback to our weekend camp! 🏕️ While the wind was blowing cold air across the mountain, we sat around the crackling campfire, singing songs and sharing funny stories. Setting up the tent under the dark sky wasn't easy, but we made unforgettable memories. Huge thanks to @troop_leader_adi for guiding us! #ScoutLife #CampfireVibes #WeekendAdventure\nComments:\n@siti_9b: Looks super fun! Wish I didn't miss this!\n@troop_leader_adi: Proud of you all! Great teamwork.",
+            question: "19. What type of multimodal text is shown above?",
+            imageURL: "",
+            options: [
+                { text: "A formal invitation card", img: "" },
+                { text: "A social media post with a photo and caption", img: "" },
+                { text: "An advertisement flyer for camping gear", img: "" },
+                { text: "A newspaper news report", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 20,
+            readingText: "Section 5: Multimodal Texts - Social Media Posts (TP 5)\nRead the Instagram caption for questions 19 to 23.\n📸 @rizky_scout📍 Cibeureum Campsite\n[Image: A group of junior high scouts wearing uniforms around a campfire at night, smiling and holding acoustic guitars.]\nCaption: Throwback to our weekend camp! 🏕️ While the wind was blowing cold air across the mountain, we sat around the crackling campfire, singing songs and sharing funny stories. Setting up the tent under the dark sky wasn't easy, but we made unforgettable memories. Huge thanks to @troop_leader_adi for guiding us! #ScoutLife #CampfireVibes #WeekendAdventure\nComments:\n@siti_9b: Looks super fun! Wish I didn't miss this!\n@troop_leader_adi: Proud of you all! Great teamwork.",
+            question: "20. Where did the activity take place?",
+            imageURL: "",
+            options: [
+                { text: "At the schoolyard", img: "" },
+                { text: "In a community center", img: "" },
+                { text: "At Cibeureum Campsite", img: "" },
+                { text: "Inside a local stadium", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 21,
+            readingText: "Section 5: Multimodal Texts - Social Media Posts (TP 5)\nRead the Instagram caption for questions 19 to 23.\n📸 @rizky_scout📍 Cibeureum Campsite\n[Image: A group of junior high scouts wearing uniforms around a campfire at night, smiling and holding acoustic guitars.]\nCaption: Throwback to our weekend camp! 🏕️ While the wind was blowing cold air across the mountain, we sat around the crackling campfire, singing songs and sharing funny stories. Setting up the tent under the dark sky wasn't easy, but we made unforgettable memories. Huge thanks to @troop_leader_adi for guiding us! #ScoutLife #CampfireVibes #WeekendAdventure\nComments:\n@siti_9b: Looks super fun! Wish I didn't miss this!\n@troop_leader_adi: Proud of you all! Great teamwork.",
+            question: "21. What was the situation when they sat around the campfire?",
+            imageURL: "",
+            options: [
+                { text: "It was raining heavily on the mountain.", img: "" },
+                { text: "The wind was blowing cold mountain air.", img: "" },
+                { text: "The scout leader was giving a stern speech.", img: "" },
+                { text: "They were taking down their tents in a hurry.", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 22,
+            readingText: "Section 5: Multimodal Texts - Social Media Posts (TP 5)\nRead the Instagram caption for questions 19 to 23.\n📸 @rizky_scout📍 Cibeureum Campsite\n[Image: A group of junior high scouts wearing uniforms around a campfire at night, smiling and holding acoustic guitars.]\nCaption: Throwback to our weekend camp! 🏕️ While the wind was blowing cold air across the mountain, we sat around the crackling campfire, singing songs and sharing funny stories. Setting up the tent under the dark sky wasn't easy, but we made unforgettable memories. Huge thanks to @troop_leader_adi for guiding us! #ScoutLife #CampfireVibes #WeekendAdventure\nComments:\n@siti_9b: Looks super fun! Wish I didn't miss this!\n@troop_leader_adi: Proud of you all! Great teamwork.",
+            question: "22. The hashtag #Throwback in the caption indicates that ...",
+            imageURL: "",
+            options: [
+                { text: "The event is happening right now in real time.", img: "" },
+                { text: "The event will happen next weekend.", img: "" },
+                { text: "The post refers to a past event.", img: "" },
+                { text: "The post is an invitation to a future camp.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 23,
+            readingText: "Section 5: Multimodal Texts - Social Media Posts (TP 5)\nRead the Instagram caption for questions 19 to 23.\n📸 @rizky_scout📍 Cibeureum Campsite\n[Image: A group of junior high scouts wearing uniforms around a campfire at night, smiling and holding acoustic guitars.]\nCaption: Throwback to our weekend camp! 🏕️ While the wind was blowing cold air across the mountain, we sat around the crackling campfire, singing songs and sharing funny stories. Setting up the tent under the dark sky wasn't easy, but we made unforgettable memories. Huge thanks to @troop_leader_adi for guiding us! #ScoutLife #CampfireVibes #WeekendAdventure\nComments:\n@siti_9b: Looks super fun! Wish I didn't miss this!\n@troop_leader_adi: Proud of you all! Great teamwork.",
+            question: "23. Why did @siti_9b write \"Wish I didn't miss this!\" in the comment section?",
+            imageURL: "",
+            options: [
+                { text: "She regrets not participating in the enjoyable camping trip.", img: "" },
+                { text: "She lost her camp ticket on her way to Cibeureum.", img: "" },
+                { text: "She was angry because her classmates didn't invite her.", img: "" },
+                { text: "She wants Rizky to post more photos on Instagram.", img: "" }
+            ],
+            answer: 0
+        },
+        {
+            id: 24,
+            readingText: "Section 6: Writing & Structuring Recount Texts (TP 6)",
+            question: "24. Arrange the following jumbled sentences into a coherent Recount Text!\n1. After two hours of climbing, we finally reached the peak just in time for sunrise.\n2. Last month, my uncle invited me to hike Mount Pule.\n3. We started our journey at 3 AM while everyone was still asleep.\n4. It was a breathtaking sight that I will never forget.\n5. Before going home, we took plenty of photos near the summit sign.",
+            imageURL: "",
+            options: [
+                { text: "2 – 3 – 1 – 5 – 4", img: "" },
+                { text: "3 – 2 – 1 – 4 – 5", img: "" },
+                { text: "2 – 1 – 3 – 4 – 5", img: "" },
+                { text: "3 – 1 – 2 – 5 – 4", img: "" }
+            ],
+            answer: 0
+        },
+        {
+            id: 25,
+            readingText: "Section 6: Writing & Structuring Recount Texts (TP 6)",
+            question: "25. Choose the best sentence that serves as an appropriate Re-orientation (closing) for a personal experience recount text.",
+            imageURL: "",
+            options: [
+                { text: "First, we bought the tickets at the entrance gate.", img: "" },
+                { text: "I hope the weather will be fine tomorrow.", img: "" },
+                { text: "Overall, it was a exhausting day, but I felt extremely proud of myself.", img: "" },
+                { text: "My brother was playing games while my mother was cooking dinner.", img: "" }
+            ],
+            answer: 2
+        },
+        {
+            id: 26,
+            readingText: "Read the paragraph for questions 26 to 28.\nYesterday, my family and I went to the beach. While my father (26) ... a beach umbrella, my brother and I (27) ... a big sandcastle near the water. Suddenly, a huge wave came and washed our sandcastle away. We were surprised, but we just (28) ... together.",
+            question: "26. Fill in blank (26) with the correct form.",
+            imageURL: "",
+            options: [
+                { text: "set up", img: "" },
+                { text: "was setting up", img: "" },
+                { text: "sets up", img: "" },
+                { text: "is setting up", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 27,
+            readingText: "Read the paragraph for questions 26 to 28.\nYesterday, my family and I went to the beach. While my father (26) ... a beach umbrella, my brother and I (27) ... a big sandcastle near the water. Suddenly, a huge wave came and washed our sandcastle away. We were surprised, but we just (28) ... together.",
+            question: "27. Fill in blank (27) with the correct form.",
+            imageURL: "",
+            options: [
+                { text: "built", img: "" },
+                { text: "were building", img: "" },
+                { text: "are building", img: "" },
+                { text: "build", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 28,
+            readingText: "Read the paragraph for questions 26 to 28.\nYesterday, my family and I went to the beach. While my father (26) ... a beach umbrella, my brother and I (27) ... a big sandcastle near the water. Suddenly, a huge wave came and washed our sandcastle away. We were surprised, but we just (28) ... together.",
+            question: "28. Fill in blank (28) with the correct form.",
+            imageURL: "",
+            options: [
+                { text: "laugh", img: "" },
+                { text: "laughed", img: "" },
+                { text: "laughing", img: "" },
+                { text: "were laughing", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 29,
+            readingText: "Read the text for questions 29 to 30.\nA Special Gift for Mom\nLast Sunday was Mother's Day. My sister and I wanted to make a surprise breakfast for our mother. We woke up at 5:30 AM while Mom was still sleeping soundly. We prepared fried rice and brewed warm tea. When Mom walked into the kitchen, she looked amazed and hugged us tightly.",
+            question: "29. What can we conclude about the atmosphere in the kitchen when Mom walked in?",
+            imageURL: "",
+            options: [
+                { text: "Tense and chaotic", img: "" },
+                { text: "Warm and touching", img: "" },
+                { text: "Awkward and silent", img: "" },
+                { text: "Crowded and noisy", img: "" }
+            ],
+            answer: 1
+        },
+        {
+            id: 30,
+            readingText: "Read the text for questions 29 to 30.\nA Special Gift for Mom\nLast Sunday was Mother's Day. My sister and I wanted to make a surprise breakfast for our mother. We woke up at 5:30 AM while Mom was still sleeping soundly. We prepared fried rice and brewed warm tea. When Mom walked into the kitchen, she looked amazed and hugged us tightly.",
+            question: "30. Which of the following statements is FALSE according to the text?",
+            imageURL: "",
+            options: [
+                { text: "The children woke up before their mother did.", img: "" },
+                { text: "The mother was already awake when the children started cooking.", img: "" },
+                { text: "The surprise breakfast consisted of fried rice and warm tea.", img: "" },
+                { text: "The event took place on Mother's Day morning.", img: "" }
+            ],
+            answer: 1
+        }
+    ];
+
+    /* ==========================================================================
+       3. STATE DAN LOGIKA APLIKASI
+       ========================================================================== */
+    let studentData = { name: "", class: "" };
+    let userAnswers = new Array(questionsData.length).fill(null);
+    let currentIdx = 0;
+    let timerInterval = null;
+    let timeLeft = 60 * 60; // 60 menit dalam detik
+    let violations = 0;
+
+    // Pindah Tampilan Layar
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    // Mulai Kuis
+    function startQuiz(e) {
+        e.preventDefault();
+        const inputPass = document.getElementById('passcode').value;
+        if (inputPass !== SYSTEM_PASSCODE) {
+            alert('Passcode yang Anda masukkan salah!');
+            return;
+        }
+
+        studentData.name = document.getElementById('studentName').value.trim();
+        studentData.class = document.getElementById('studentClass').value.trim();
+
+        document.getElementById('displayStudent').innerText = studentData.name;
+        document.getElementById('displayClass').innerText = `(${studentData.class})`;
+
+        showScreen('screen-quiz');
+        renderQuestion();
+        startTimer();
+        setupProctoring();
+    }
+
+    // Render Soal Aktual
+    function renderQuestion() {
+        const q = questionsData[currentIdx];
+
+        // Teks Bacaan
+        const readingBox = document.getElementById('readingBox');
+        if (q.readingText) {
+            readingBox.innerText = q.readingText;
+            readingBox.style.display = 'block';
+        } else {
+            readingBox.style.display = 'none';
+        }
+
+        // Gambar Soal
+        const qImg = document.getElementById('questionImage');
+        if (q.imageURL && q.imageURL.trim() !== "") {
+            qImg.src = q.imageURL;
+            qImg.style.display = 'block';
+        } else {
+            qImg.style.display = 'none';
+        }
+
+        // Teks Soal
+        document.getElementById('questionText').innerText = q.question;
+
+        // Container Pilihan Ganda
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+
+        const prefixes = ['A', 'B', 'C', 'D'];
+        q.options.forEach((opt, idx) => {
+            const card = document.createElement('div');
+            card.className = `option-card ${userAnswers[currentIdx] === idx ? 'selected' : ''}`;
+            card.onclick = () => selectOption(idx);
+
+            let imgHTML = (opt.img && opt.img.trim() !== "") ? `<img src="${opt.img}" class="option-img" style="display:inline-block;" />` : '';
+
+            card.innerHTML = `
+                <div class="option-prefix">${prefixes[idx]}</div>
+                <div style="flex-grow: 1;">${opt.text}</div>
+                ${imgHTML}
+            `;
+            container.appendChild(card);
+        });
+
+        // Kontrol Tombol Navigasi
+        document.getElementById('btnPrev').style.visibility = currentIdx === 0 ? 'hidden' : 'visible';
+        const nextBtn = document.getElementById('btnNext');
+        if (currentIdx === questionsData.length - 1) {
+            nextBtn.innerText = "Selesai & Kirim";
+            nextBtn.className = "btn btn-nav btn-finish";
+        } else {
+            nextBtn.innerText = "Selanjutnya";
+            nextBtn.className = "btn btn-nav";
+        }
+    }
+
+    function selectOption(optIdx) {
+        userAnswers[currentIdx] = optIdx;
+        renderQuestion();
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            renderQuestion();
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questionsData.length - 1) {
+            currentIdx++;
+            renderQuestion();
+        } else {
+            if (confirm("Apakah Anda yakin ingin menyelesaikan ujian dan mengirim jawaban?")) {
+                finishQuiz();
+            }
+        }
+    }
+
+    /* ==========================================================================
+       4. TIMER & PENCEGAHAN KECURANGAN
+       ========================================================================== */
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById('timerDisplay').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Waktu pengerjaan telah habis!");
+                finishQuiz();
+            }
+        }, 1000);
+    }
+
+    function setupProctoring() {
+        // Deteksi Perpindahan Tab / Window Blur
+        window.onblur = function() {
+            violations++;
+            document.getElementById('violationBadge').innerText = `Pelanggaran: ${violations}/3`;
+            if (violations >= 3) {
+                alert("Anda telah melakukan pelanggaran terbanyak (3 kali keluar dari halaman ujian). Ujian dibatalkan dan dikembalikan ke awal!");
+                resetApp();
+            } else {
+                alert(`Peringatan Pelanggaran (${violations}/3): Dilarang berpindah tab atau meninggalkan layar ujian!`);
+            }
+        };
+    }
+
+    function clearProctoring() {
+        window.onblur = null;
+    }
+
+    /* ==========================================================================
+       5. PERHITUNGAN SKOR & PENGIRIMAN DATA
+       ========================================================================== */
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        clearProctoring();
+
+        let correct = 0;
+        let wrong = 0;
+        let wrongQuestions = [];
+
+        questionsData.forEach((q, idx) => {
+            if (userAnswers[idx] === q.answer) {
+                correct++;
+            } else {
+                wrong++;
+                wrongQuestions.push(q.id);
+            }
+        });
+
+        // Perhitungan Skor (Skala 100)
+        let finalScore = Math.round((correct / questionsData.length) * 100);
+
+        // Tampilkan Hasil
+        document.getElementById('finalScore').innerText = finalScore;
+        document.getElementById('correctCount').innerText = correct;
+        document.getElementById('wrongCount').innerText = wrong;
+        document.getElementById('wrongList').innerText = wrongQuestions.length > 0 ? 
+            `No Soal Salah: ${wrongQuestions.join(', ')}` : "Selamat! Tidak ada jawaban yang salah.";
+        document.getElementById('resultStudentInfo').innerText = `${studentData.name} (${studentData.class})`;
+
+        showScreen('screen-result');
+
+        // Payload Data untuk Google Apps Script (GAS)
+        const payload = {
+            timestamp: new Date().toLocaleString("id-ID"),
+            nama: studentData.name,
+            kelas: studentData.class,
+            benar: correct,
+            salah: wrong,
+            skorAkhir: finalScore,
+            jumlahPelanggaran: violations,
+            noSoalSalah: wrongQuestions.join(', ')
+        };
+
+        sendDataToGAS(payload);
+    }
+
+    function sendDataToGAS(data) {
+        if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL.includes("AKfycbx...")) {
+            console.log("GAS URL belum diatur secara spesifik. Data lokal:", data);
+            return;
+        }
+
+        fetch(GAS_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => console.log("Data berhasil dikirim ke Google Sheets."))
+        .catch(err => console.error("Gagal mengirim data ke GAS:", err));
+    }
+
+    function resetApp() {
+        clearInterval(timerInterval);
+        clearProctoring();
+        timeLeft = 60 * 60;
+        violations = 0;
+        userAnswers = new Array(questionsData.length).fill(null);
+        currentIdx = 0;
+        document.getElementById('loginForm').reset();
+        document.getElementById('violationBadge').innerText = `Pelanggaran: 0/3`;
+        showScreen('screen-login');
+    }
+</script>
+</body>
+</html>
